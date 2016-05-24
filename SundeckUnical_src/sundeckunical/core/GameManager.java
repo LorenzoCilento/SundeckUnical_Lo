@@ -286,6 +286,7 @@ public class GameManager {
 					for(AbstractMovableObj o : world.getObjects()) {
 						if(((Obstacle) o).getExplosion_animation().getIndex() == ((Obstacle) o).getExplosion_animation().getSizeFrame() - 1) {
 							world.remove(o);
+							System.out.println("gamemanager ");
 							break;
 						}
 					}

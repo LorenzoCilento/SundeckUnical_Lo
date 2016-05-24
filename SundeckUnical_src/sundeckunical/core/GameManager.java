@@ -293,8 +293,13 @@ public class GameManager {
 					
 				p.update();
 				
-				for(AbstractMovableObj o : world.getObjects()) 
+				for(AbstractMovableObj o : world.getObjects()) {
 					o.update();
+					if(p.getY()+300<o.getY()){
+						world.remove(o);
+						break;
+					}
+				}
 			
 				
 				for(Bonus b : world.getBonus())

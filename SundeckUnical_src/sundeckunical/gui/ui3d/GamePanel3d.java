@@ -1,4 +1,4 @@
-package sundekunical.gui.ui3d;
+package sundeckunical.gui.ui3d;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -3,7 +3,7 @@ package sundeckunical.core;
 import java.awt.Graphics;
 
 import sundeckunical.gui.GamePanel;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 public class Enemy extends AbstractMovableObj{
 	

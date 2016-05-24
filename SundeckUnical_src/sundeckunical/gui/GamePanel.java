@@ -1,7 +1,7 @@
 package sundeckunical.gui;
 
 import sundeckunical.core.*;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -222,8 +222,8 @@ public class GamePanel extends JPanel {
 		g.drawImage(myImageProvider.getAlberi(), 0, nx2, (int)screenSize().getWidth(),(int)screenSize().getHeight(),null);
 	
 		
-		drawScore(g);
-		drawMeter(g);
+//		drawScore(g);
+//		drawMeter(g);
 		
 		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
 		getViewCamera().updateOffset(getPlayer());
@@ -237,8 +237,8 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void start() {
-		playerName = null;
-		networkManager = null;
+//		playerName = null;
+//		networkManager = null;
 		
 		requestFocus();
 //		bgMusic.loop();
@@ -254,7 +254,7 @@ public class GamePanel extends JPanel {
 //					mainframe.showMenu(MainFrame.MENU_PANEL);
 //				}
 			}
-		}, null);	
+		}, networkManager.getAllPlayerNames());	
 	}
 	
 	public int tick() {
@@ -275,6 +275,7 @@ public class GamePanel extends JPanel {
 		System.out.println("GamePanel.startNetwork() " + playerName);
 		gameManager.startNetworkGame(networkManager.getAllPlayerNames());
 		playerCam = getViewCamera().getCamY();
+		this.start();
 		requestFocus();
 		return gameManager;
 	}

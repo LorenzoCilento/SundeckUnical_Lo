@@ -205,7 +205,7 @@ public class World {
 		return multiPlayerMap;
 	}
 	
-	public void parseStatusFromString(String status, NetworkManager networkManager){
+	public void parseStatusFromString(String status){
 		String[] elements = status.split("#");
 		String[] player = elements[0].split(";");
 		String[] object = elements[1].split(";");
@@ -233,15 +233,15 @@ public class World {
 			for(String s : bonus) {
 				String[] split = s.split(":");
 				if(split[2].toString().equals("sundeckunical.core.BombBonus"))
-					this.objects.add(new BombBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0])));
+					this.bonus.add(new BombBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0])));
 				if(split[2].toString().equals("sundeckunical.core.PointBonus")){
 					PointBonus pointBonus = new PointBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0]));
 					pointBonus.getAnimation_bonus().setIndex(Integer.parseInt(split[3]));
 					pointBonus.toString();
-					this.objects.add(pointBonus);
+					this.bonus.add(pointBonus);
 				}
 					if(split[2].toString().equals("sundeckunical.core.SpeedBonus"))
-					this.objects.add(new SpeedBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0])));
+					this.bonus.add(new SpeedBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0])));
 			}
 		}
 	}

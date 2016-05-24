@@ -1,4 +1,4 @@
-package sundekunical.network;
+package sundeckunical.network;
 
 import java.io.IOException;
 import java.net.ServerSocket;

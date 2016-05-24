@@ -1,4 +1,4 @@
-package sundekunical.network;
+package sundeckunical.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +41,7 @@ class ClientManager implements Runnable {
 			final boolean running = true;
 			while (running) {
 				final String buffer = br.readLine();
-				server.received(buffer);
+//				server.received(buffer);
 			}
 		} catch (final IOException e) {
 			System.out.println("Client disconnected: " + name);

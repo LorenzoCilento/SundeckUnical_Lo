@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import sundeckunical.gui.Animation;
 import sundeckunical.gui.GamePanel;
 import sundeckunical.gui.NetworkManager;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 public class Player extends AbstractMovableObj implements PowerUp{
 

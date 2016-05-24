@@ -1,7 +1,7 @@
 package sundeckunical.core;
 
 import sundeckunical.gui.NetworkManager;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 /*
  * QUESTA CLASSE IMPLEMENTA L'INTERFACCIA MOVABLEOBJ,

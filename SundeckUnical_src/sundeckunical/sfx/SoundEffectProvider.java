@@ -1,4 +1,4 @@
-package sundekunical.sfx;
+package sundeckunical.sfx;
 
 import javax.sound.sampled.*;
 

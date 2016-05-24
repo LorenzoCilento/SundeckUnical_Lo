@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import sundeckunical.gui.Animation;
 import sundeckunical.gui.GamePanel;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 public class PointBonus extends Bonus{
 	
@@ -47,8 +47,7 @@ public class PointBonus extends Bonus{
 	
 	@Override
 	public void draw(Graphics g){
-//		g.drawImage(animation_bonus.getCurrentFrame(),getX(),getY(),getWIDTH(),getHEIGHT(),null);
-		g.drawImage(GamePanel.getMyImageProvider().getObstacle(),getX(),getY(),getWIDTH(),getHEIGHT(),null);
+		g.drawImage(animation_bonus.getCurrentFrame(),getX(),getY(),getWIDTH(),getHEIGHT(),null);
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import sundeckunical.gui.NetworkManager;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 public class GameManager {
 
@@ -177,8 +177,8 @@ public class GameManager {
 		return getWorld().statusToString();
 	}
 	
-	public void parseStatusFromString(String status,NetworkManager networkManager){
-		getWorld().parseStatusFromString(status,networkManager);
+	public void parseStatusFromString(String status){
+		getWorld().parseStatusFromString(status);
 	}
 	
 	public NetworkManager getNetworkManager() {
@@ -212,7 +212,6 @@ public class GameManager {
 			@Override
 			public void run() {
 				while(running) {
-						
 					for(Player p : getWorld().getMultiPlayerMap().values()){
 					for( AbstractMovableObj mov : world.getObjects() ){
 						if(Collision.checkTypeCollision(p, mov) != TypeOfCollision.ANYTHING && !mov.isCaptured()&&!p.isArrivedJumping()){

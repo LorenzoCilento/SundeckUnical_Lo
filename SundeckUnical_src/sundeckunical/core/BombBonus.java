@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import sundeckunical.gui.Animation;
 import sundeckunical.gui.GamePanel;
-import sundekunical.sfx.SoundEffectProvider;
+import sundeckunical.sfx.SoundEffectProvider;
 
 class BombBonus extends Bonus {
 

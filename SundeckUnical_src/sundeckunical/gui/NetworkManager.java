@@ -89,8 +89,7 @@ public class NetworkManager implements Runnable {
 				// mainFrame.showMenu();
 				// } else {
 				gameManager.parseStatusFromString(buffer);
-//				gameManager.parseStatusFromString(buffer);
-//				mainFrame.getGamePanel().repaint();
+				mainFrame.getGamePanel().repaint();
 				buffer = br.readLine();
 				// }
 			}

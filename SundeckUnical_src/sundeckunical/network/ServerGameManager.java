@@ -57,6 +57,10 @@ class ServerGameManager {
 			}
 		}
 	}
+	
+	public GameManager getGameManager() {
+		return gameManager;
+	}
 
 	public void startGame() throws IOException {
 		List<String> names = new ArrayList<>();
@@ -73,6 +77,7 @@ class ServerGameManager {
 				dispatch(statusToString, null);
 			}
 		}, names);
+		
+		
 	}
-
 }

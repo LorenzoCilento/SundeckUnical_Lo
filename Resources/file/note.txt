@@ -1,0 +1,5 @@
+Da implementare:
+
+- ScreenGameOver
+- ScroolPanel
+- Capture Screen

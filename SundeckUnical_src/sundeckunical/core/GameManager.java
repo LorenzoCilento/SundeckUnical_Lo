@@ -266,6 +266,10 @@ public class GameManager {
 							 world.remove(mov);
 							 break;
 						}
+						if(p.getY()+300<mov.getY()){
+							world.remove(mov);
+							break;
+						}
 					}
 					
 					

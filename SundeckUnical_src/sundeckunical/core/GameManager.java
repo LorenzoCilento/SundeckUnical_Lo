@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import sundeckunical.gui.NetworkManager;
+import sundeckunical.multiPlayer.Client;
 import sundeckunical.sfx.SoundEffectProvider;
 
 public class GameManager {
@@ -18,6 +19,7 @@ public class GameManager {
 	private static World world;
 	private WorldManager worldManager;
 	private boolean running;
+	private Client client = null;
 
 	private final List<Score> scores = new ArrayList<Score>();
 	
@@ -44,8 +46,8 @@ public class GameManager {
 		world.setCorsie();
 	}
 	
-	public void setupObject(List<String> multiPlayerName){
-		world.setupPlayer(multiPlayerName);
+	public void setupObject(String name){
+		world.setupPlayer(name);
 		
 		for(Entry<String, Player> e : getWorld().getMultiPlayerMap().entrySet()){
 			e.getValue().setWorld(world);
@@ -102,6 +104,10 @@ public class GameManager {
 
 	public void setOffSetMaxY(int offSetMaxY) {
 		this.offSetMaxY = offSetMaxY;
+	}
+	
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public int getOffSetMinY() {
@@ -177,8 +183,16 @@ public class GameManager {
 		return getWorld().statusToString();
 	}
 	
+	public String statusPlayerToString() {
+		return getWorld().statusPlayerToString();
+	}
+	
 	public void parseStatusFromString(String status){
 		getWorld().parseStatusFromString(status);
+	}
+	
+	public void addPlayer(String string){
+		getWorld().addPlayer(string);
 	}
 	
 	public NetworkManager getNetworkManager() {
@@ -189,11 +203,17 @@ public class GameManager {
 		this.manager = manager;
 	}
 
-	public void start(final Runnable runnable, List<String> multiPlayerNames)
+	public void start(final Runnable runnable)
 	{
 			System.out.println("run load gamemanager");
 			loadWorld();
-			setupObject(multiPlayerNames);
+			if(client != null)	{
+				setupObject(client.getName());
+			}
+			else{
+				setupObject(null);
+				setRunning(true);
+			}
 			
 			for(Player p : getWorld().getMultiPlayerMap().values()){
 				System.out.println("set");
@@ -202,8 +222,7 @@ public class GameManager {
 				p.setStartGameTime(System.currentTimeMillis());
 				System.out.println("Time " + p.getStartGameTime());
 			}
-
-		running=true;
+			
 		
 		if(!getWorld().isAlive())
 			getWorld().setAlive(true);
@@ -306,6 +325,13 @@ public class GameManager {
 				for(Bonus b : world.getBonus())
 					b.update();
 				
+					try {
+						if(client != null)
+							client.notifyMyState();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 //				world.getEnemy().update();
 				p.checkActiveBonus();
 //				updateOffset();
@@ -330,11 +356,14 @@ public class GameManager {
 		}
 			}.start();
 	}
+	
+	public void setRunning(boolean running){
+		this.running = running;
+	}
 
-	public void startNetworkGame(List<String> allPlayerNames) {
+	public void startNetworkGame(String name) {
 		loadWorld();
-		setupObject(allPlayerNames);
+		setupObject(name);
 		getWorld().setAlive(true);
-		
 	}
 }

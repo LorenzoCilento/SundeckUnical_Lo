@@ -254,7 +254,7 @@ public class GamePanel extends JPanel {
 //					mainframe.showMenu(MainFrame.MENU_PANEL);
 //				}
 			}
-		}, networkManager.getAllPlayerNames());	
+		});	
 	}
 	
 	public int tick() {
@@ -273,7 +273,7 @@ public class GamePanel extends JPanel {
 		this.networkManager = networkManager;
 		playerName = networkManager.getPlayerName();
 		System.out.println("GamePanel.startNetwork() " + playerName);
-		gameManager.startNetworkGame(networkManager.getAllPlayerNames());
+//		gameManager.startNetworkGame(networkManager.getAllPlayerNames());
 		playerCam = getViewCamera().getCamY();
 		this.start();
 		requestFocus();

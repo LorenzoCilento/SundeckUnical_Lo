@@ -28,7 +28,7 @@ public class Server extends Thread {
 				ClientManager clientManager = new ClientManager(this,socket);
 				clients.add(clientManager);
 				clientManager.startConnection();
-				System.out.println("erver player "+contNumberPlayer );
+				System.out.println("server player "+contNumberPlayer );
 				contNumberPlayer++;
 				
 			} catch (IOException e) {

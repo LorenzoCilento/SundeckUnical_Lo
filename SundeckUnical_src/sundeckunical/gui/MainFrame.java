@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import sundeckunical.core.GameManager;
-import sundeckunical.gui.ui3d.GamePanel3d;
 
 
 public class MainFrame extends JFrame {

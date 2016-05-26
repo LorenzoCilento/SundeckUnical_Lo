@@ -5,10 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-
-import sundeckunical.gui.MainFrame;
 
 public class ClientManager extends Thread {
 	private Server server;
@@ -19,7 +15,7 @@ public class ClientManager extends Thread {
 
 	public ClientManager(Server server, Socket socket) throws IOException {
 		this.server = server;
-		this.socket = socket;
+		this.socket = new Socket(socket.getInetAddress(),server.getPort());
 		input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		output = new DataOutputStream(socket.getOutputStream());
 	}
@@ -46,23 +42,23 @@ public class ClientManager extends Thread {
 	public void sendStart() throws IOException {
 		output.writeBytes("Start" + "\n");
 	}
-	
-	public void notifyMyState() throws IOException{
-		output.writeBytes("myState"+"\n");	
+
+	public void notifyMyState() throws IOException {
+		output.writeBytes("myState" + "\n");
 		String line = input.readLine();
-		for(ClientManager c : server.getClients()){
+		for (ClientManager c : server.getClients()) {
 			c.receivedState(line);
 		}
-			
+
 	}
-	
-	public void receivedState(String status) throws IOException{
-		output.writeBytes("state"+"\n");
+
+	public void receivedState(String status) throws IOException {
+		output.writeBytes("state" + "\n");
 		this.line = status;
 	}
-	
-	public void sendState() throws IOException{
-		output.writeBytes(this.line+"\n");
+
+	public void sendState() throws IOException {
+		output.writeBytes(this.line + "\n");
 	}
 
 	@Override
@@ -70,14 +66,14 @@ public class ClientManager extends Thread {
 		boolean isStart = false;
 		try {
 			String line = input.readLine();
-			if(line.equals("Start"))
+			if (line.equals("Start"))
 				isStart = true;
-			while(isStart){
+			while (isStart) {
 				line = input.readLine();
-				if(line.equals("myState")){
+				if (line.equals("myState")) {
 					notifyMyState();
 				}
-				if(line.equals("state")){
+				if (line.equals("state")) {
 					sendState();
 				}
 			}

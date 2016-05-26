@@ -21,9 +21,14 @@ public class Server extends Thread {
 	@Override
 	public void run() {
 		int contNumberPlayer = 0;
-		
+//		try {
+//			socket = new Socket(server.getInetAddress(),port);
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
 		while(contNumberPlayer != numberPlayer){
 			try {
+				System.out.println("server player "+contNumberPlayer );
 				Socket socket = server.accept();
 				ClientManager clientManager = new ClientManager(this,socket);
 				clients.add(clientManager);
@@ -47,6 +52,10 @@ public class Server extends Thread {
 	
 	public Collection<ClientManager> getClients() {
 		return clients;
+	}
+	
+	public int getPort(){
+		return port;
 	}
 	
 	public static void main(String[] args) throws IOException {

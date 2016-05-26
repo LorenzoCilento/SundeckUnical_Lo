@@ -22,6 +22,7 @@ public class World {
 	protected static int [] corsie;
 	
 	private static final String DEFAULT_PLAYER_NAME = "PLAYER_1";
+	private String playerName = null;
 	Map<String, Player> multiPlayerMap;
 	Map<String, ViewCamera> multiViewCamera;
 //	private Enemy enemy;
@@ -124,6 +125,14 @@ public class World {
 		}
 	}
 	
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+	
+	public String getPlayerName() {
+		return playerName;
+	}
+	
 	public int [] getCorsie(){
 		return corsie;
 	}
@@ -166,23 +175,20 @@ public class World {
 		return idWorld;
 	}
 	
-	public void setupPlayer(List<String> names){
+	public void setupPlayer(String name){
 		multiPlayerMap = new HashMap<String,Player>();
 		multiViewCamera = new HashMap<String,ViewCamera>();
-		if(names == null){
+		
+		if(name == null){
 			multiPlayerMap.put(DEFAULT_PLAYER_NAME, new Player(getCorsie()[Player.defaultCorsia], getHEIGHT(),Direction.UP,Player.defaultCorsia));
 			multiViewCamera.put(DEFAULT_PLAYER_NAME, new ViewCamera(getHEIGHT()));
 		}
-		else {
-			int i = 1;
-			for(String n : names){
-				System.out.println("setup player "+n);
-				getMultiPlayerMap().put(n, new Player(getCorsie()[i], getHEIGHT(),Direction.UP,i));
-				multiViewCamera.put(n, new ViewCamera(getHEIGHT()));
-				i++;
-			}
+		else{
+			multiPlayerMap.put(name, new Player(getCorsie()[Player.defaultCorsia], getHEIGHT(),Direction.UP,Player.defaultCorsia));
+			multiViewCamera.put(name, new ViewCamera(getHEIGHT()));
+			setPlayerName(name);
 		}
-		inizializzaPlayer();
+		
 	}
 	
 	public void inizializzaPlayer() {
@@ -244,6 +250,26 @@ public class World {
 					this.bonus.add(new SpeedBonus(getCorsie()[Integer.parseInt(split[0])], Integer.parseInt(split[1]), Direction.STOP, Integer.parseInt(split[0])));
 			}
 		}
+	}
+	
+	public void addPlayer(String string){
+		String[] split = string.split(":");
+		int x = Integer.parseInt(split[1]);
+		int y = Integer.parseInt(split[2]);
+		Direction direction = Direction.valueOf(split[3]);
+		int corsia = Integer.parseInt(split[4]);
+		multiPlayerMap.put(split[0], new Player(x, y, direction, corsia));
+	}
+	
+	public String statusPlayerToString(){
+		StringBuilder sb = new StringBuilder();
+		Player p = multiPlayerMap.get(playerName);
+			sb.append(playerName+":"+p.getX()+":"+p.getY()+":"+p.getDirection()+":"+p.getCorsia()+";");
+		return sb.toString();
+	}
+	
+	public void parseStatusPlayerFormString(String string){
+		
 	}
 	
 	public String statusToString() {

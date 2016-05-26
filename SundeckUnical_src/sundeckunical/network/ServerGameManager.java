@@ -9,11 +9,13 @@ import java.util.Set;
 import sundeckunical.core.Direction;
 import sundeckunical.core.GameManager;
 
-class ServerGameManager {
+class ServerGameManager implements Runnable{
 	private final Set<ClientManager> clients = new HashSet<ClientManager>();
 
-	private GameManager gameManager;
+	GameManager gameManager;
 	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();
+	
+	boolean running;
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);
@@ -62,22 +64,41 @@ class ServerGameManager {
 		return gameManager;
 	}
 
-	public void startGame() throws IOException {
-		List<String> names = new ArrayList<>();
-		for (final ClientManager cm : clients) {
-			cm.setup();
-			new Thread(cm, cm.toString()).start();
-			names.add(cm.getName());
-		}
-		gameManager = new GameManager();
-		gameManager.start(new Runnable() {
-			@Override
-			public void run() {
-				String statusToString = gameManager.statusToString();
-				dispatch(statusToString, null);
+//	public void startGame() throws IOException {
+//		List<String> names = new ArrayList<>();
+//		for (final ClientManager cm : clients) {
+//			cm.setup();
+//			new Thread(cm, cm.toString()).start();
+//			names.add(cm.getName());
+//		}
+//		gameManager = new GameManager();
+//		gameManager.start(new Runnable() {
+//			@Override
+//			public void run() {
+//				String statusToString = gameManager.statusToString();
+//				dispatch(statusToString, null);
+//			}
+//		}, names);
+//		
+		
+//	}
+
+	@Override
+	public void run() {
+			try {
+			for(ClientManager cm : clients){
+				cm.setup();
+				cm.run();
 			}
-		}, names);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
-		
+		running = true;
+		while(running){
+			
+		}
 	}
 }

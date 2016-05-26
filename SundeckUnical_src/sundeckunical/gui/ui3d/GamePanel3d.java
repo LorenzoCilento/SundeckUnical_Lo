@@ -76,7 +76,7 @@ public class GamePanel3d extends SimpleApplication{
 					System.out.println(gameManager.getWorld().getPlayer().getX());
 				}	
 			}
-		}, null);
+		});
 		
 	}
 	public void caricaPonte() {

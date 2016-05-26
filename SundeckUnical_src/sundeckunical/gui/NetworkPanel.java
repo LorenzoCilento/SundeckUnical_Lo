@@ -16,6 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import sundeckunical.core.GameManager;
+import sundeckunical.multiPlayer.Client;
+import sundeckunical.multiPlayer.Server;
+
 public class NetworkPanel extends JPanel {
 	private JDialog dialog;
 
@@ -46,7 +50,7 @@ public class NetworkPanel extends JPanel {
 		constraints.gridx = 0;
 		content.add(new JLabel("Server Port"), constraints);
 		portTextField = new JTextField(20);
-		portTextField.setText("2727");
+		portTextField.setText("8080");
 		constraints.gridx++;
 		content.add(portTextField, constraints);
 		constraints.gridy++;
@@ -79,12 +83,19 @@ public class NetworkPanel extends JPanel {
 		add(content, BorderLayout.CENTER);
 	}
 
+//	protected void connectoToServer() throws Exception {
+//		final Socket socket = new Socket(ipTextField.getText(),
+//				Integer.parseInt(portTextField.getText()));
+//		final NetworkManager networkManager = new NetworkManager(
+//				socket, nameTextField.getText(), mainFrame);
+//		new Thread(networkManager, "Connection Manager").start();
+//		dialog.dispose();
+//	}
+	
 	protected void connectoToServer() throws Exception {
 		final Socket socket = new Socket(ipTextField.getText(),
 				Integer.parseInt(portTextField.getText()));
-		final NetworkManager networkManager = new NetworkManager(
-				socket, nameTextField.getText(), mainFrame);
-		new Thread(networkManager, "Connection Manager").start();
+		final Client client = new Client(socket,nameTextField.getText(),  new GameManager());
 		dialog.dispose();
 	}
 }

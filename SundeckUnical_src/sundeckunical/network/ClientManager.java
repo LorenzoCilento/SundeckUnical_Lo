@@ -14,13 +14,13 @@ class ClientManager implements Runnable {
 
 	private PrintWriter pw;
 
-	private final ServerGameManager server;
+	private final ServerGameManager serverGameManager;
 
 	private final Socket socket;
 
 	public ClientManager(final Socket socket, final ServerGameManager server) {
 		this.socket = socket;
-		this.server = server;
+		this.serverGameManager = server;
 	}
 
 	public void dispatch(final String message) {
@@ -37,23 +37,31 @@ class ClientManager implements Runnable {
 	@Override
 	public void run() {
 		try {
-			server.setReady(this);
+			serverGameManager.setReady(this);
 			final boolean running = true;
 			while (running) {
 				final String buffer = br.readLine();
-					server.received(buffer);
+					serverGameManager.received(buffer);
 			}
 		} catch (final IOException e) {
 			System.out.println("Client disconnected: " + name);
 		}
 	}
 
-	String setup() throws IOException {
+//	String setup() throws IOException {
+//		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//		pw = new PrintWriter(socket.getOutputStream(), true);
+//		name = br.readLine();
+//		server.dispatch(server.getConnectedClientNames(), null);
+//		return name;
+//	}
+	
+
+	public void setup() throws IOException {
 		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		pw = new PrintWriter(socket.getOutputStream(), true);
 		name = br.readLine();
-		server.dispatch(server.getConnectedClientNames(), null);
-		return name;
+		serverGameManager.dispatch(serverGameManager.getConnectedClientNames(), null);
 	}
 
 }

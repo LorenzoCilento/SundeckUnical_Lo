@@ -70,6 +70,15 @@ public class Player extends AbstractMovableObj implements PowerUp{
 	public void invisibilityOff() {
 		this.invisible=false;
 	}
+	
+	public boolean getInvisible(){
+		return invisible;
+	}
+	
+	public void setInvisible(boolean invisible) {
+		this.invisible = invisible;
+	}
+
 		
 	@Override
 	public void moreSpeed() {

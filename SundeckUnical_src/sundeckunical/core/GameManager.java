@@ -206,11 +206,8 @@ public class GameManager {
 	public void start(final Runnable runnable)
 	{
 			System.out.println("run load gamemanager");
-			loadWorld();
-			if(client != null)	{
-				setupObject(client.getName());
-			}
-			else{
+			if(client==null){
+				loadWorld();
 				setupObject(null);
 				setRunning(true);
 			}

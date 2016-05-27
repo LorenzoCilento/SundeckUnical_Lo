@@ -15,14 +15,18 @@ public class ClientManager extends Thread {
 
 	public ClientManager(Server server, Socket socket) throws IOException {
 		this.server = server;
-		this.socket = new Socket(socket.getInetAddress(),server.getPort());
+		this.socket = socket;
 		input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		output = new DataOutputStream(socket.getOutputStream());
 	}
 
 	public void startConnection() throws IOException {
-		if (input.readLine().equals("Connect me"))
+		System.out.println("Start connection CLIENT MANAGER");
+		if (input.readLine().equals("Connect me")){
+			System.out.println("if connect me");
 			output.writeBytes("yes parse your status" + "\n");
+		}
+		System.out.println("dopo if");
 		String state = input.readLine();
 		for (ClientManager c : server.getClients()) {
 			if (c != this)
@@ -63,12 +67,14 @@ public class ClientManager extends Thread {
 
 	@Override
 	public void run() {
+		System.out.println("CLIENT MANAGER RUN");
 		boolean isStart = false;
 		try {
 			String line = input.readLine();
 			if (line.equals("Start"))
 				isStart = true;
 			while (isStart) {
+				System.out.println("CLIENT MANAGER RUN is start");
 				line = input.readLine();
 				if (line.equals("myState")) {
 					notifyMyState();

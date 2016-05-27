@@ -95,7 +95,7 @@ public class NetworkPanel extends JPanel {
 	protected void connectoToServer() throws Exception {
 		final Socket socket = new Socket(ipTextField.getText(),
 				Integer.parseInt(portTextField.getText()));
-		final Client client = new Client(socket,nameTextField.getText(),  new GameManager());
+		Client client = new Client(socket, nameTextField.getText(),mainFrame);
 		dialog.dispose();
 	}
 }

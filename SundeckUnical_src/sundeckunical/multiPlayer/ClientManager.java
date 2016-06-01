@@ -11,7 +11,7 @@ public class ClientManager extends Thread {
 	private Socket socket;
 	private BufferedReader input;
 	private DataOutputStream output;
-	private String line;
+	private String statusPlayer;
 
 	public ClientManager(Server server, Socket socket) throws IOException {
 		this.server = server;
@@ -96,12 +96,12 @@ public class ClientManager extends Thread {
 	public void receivedState(String status) throws IOException {
 		output.writeBytes("state" + "\n");
 		System.out.println("Server: received state" + status);
-		this.line = status;
+		this.statusPlayer = status;
 	}
 
 	public void sendState() throws IOException {
-		System.out.println("Server: send state");
-		output.writeBytes(this.line + "\n");
+		System.out.println("Server: send state"+ this.statusPlayer);
+		output.writeBytes(this.statusPlayer + "\n");
 	}
 
 	@Override

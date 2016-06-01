@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
@@ -65,7 +66,12 @@ public class GamePanel extends JPanel {
 						setDirection(Direction.LEFT);
 //						GameManager.getWorld().getEnemy().setCorsia(GameManager.getWorld().getEnemy().getCorsia()-1);
 //						GameManager.getWorld().getEnemy().setDirection(Direction.LEFT);
-						signalServer(getPlayer().getCorsia());
+						try {
+							gameManager.getClient().notifyMyState();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						swipePlayer.play();
 					}
 				}
@@ -80,7 +86,12 @@ public class GamePanel extends JPanel {
 							setDirection(Direction.RIGHT);
 //							GameManager.getWorld().getEnemy().setCorsia(GameManager.getWorld().getEnemy().getCorsia()+1);
 //							GameManager.getWorld().getEnemy().setDirection(Direction.RIGHT);
-							signalServer(getPlayer().getCorsia());
+							try {
+								gameManager.getClient().notifyMyState();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							swipePlayer.play();
 						}	
 				}

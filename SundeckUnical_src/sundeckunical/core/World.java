@@ -284,7 +284,8 @@ public class World {
 		Direction direction = Direction.valueOf(split[3]);
 		int corsia = Integer.parseInt(split[4]);
 		System.out.println(split[0].toString()+" "+x+" "+y+" "+direction.name()+" "+ corsia);
-		if(name != playerName){
+		if(!name.equals(playerName)){
+			System.out.println("aggiorno "+name+" nel mondo di "+playerName);
 			getMultiPlayerMap().get(name).setX(x);
 			getMultiPlayerMap().get(name).setY(y);
 			getMultiPlayerMap().get(name).setDirection(direction);

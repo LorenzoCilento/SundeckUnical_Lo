@@ -111,6 +111,10 @@ public class GameManager {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+	
+	public Client getClient() {
+		return client;
+	}
 
 	public int getOffSetMinY() {
 		return offSetMinY;
@@ -363,7 +367,7 @@ public class GameManager {
 	
 	public void startNetwork(final Runnable runnable)
 	{
-			
+			Direction direction;
 			
 			for(Player p : getWorld().getMultiPlayerMap().values()){
 				System.out.println("set");
@@ -478,15 +482,15 @@ public class GameManager {
 				for(Bonus b : world.getBonus())
 					b.update();
 				
-					try {
-						if(client != null){
-//							System.out.println("GameManaget "+client.getClientName());
-							client.notifyMyState();
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//						if(client != null){
+////							System.out.println("GameManaget "+client.getClientName());
+//							client.notifyMyState();
+//						}
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 //				world.getEnemy().update();
 				p.checkActiveBonus();
 //				updateOffset();

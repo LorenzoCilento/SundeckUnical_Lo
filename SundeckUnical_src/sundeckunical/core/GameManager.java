@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -50,6 +51,7 @@ public class GameManager {
 		world.setupPlayer(name);
 		
 		for(Entry<String, Player> e : getWorld().getMultiPlayerMap().entrySet()){
+			System.out.println("Setup object set world "+ e.getKey() );
 			e.getValue().setWorld(world);
 		}
 		
@@ -187,6 +189,10 @@ public class GameManager {
 		return getWorld().statusPlayerToString();
 	}
 	
+	public void refreshPlayer(String status) {
+		getWorld().refreshPlayer(status);
+	}
+	
 	public void parseStatusFromString(String status){
 		getWorld().parseStatusFromString(status);
 	}
@@ -205,8 +211,9 @@ public class GameManager {
 
 	public void start(final Runnable runnable)
 	{
-			System.out.println("run load gamemanager");
 			if(client==null){
+				System.out.println("run load gamemanager");
+				
 				loadWorld();
 				setupObject(null);
 				setRunning(true);
@@ -220,6 +227,155 @@ public class GameManager {
 				System.out.println("Time " + p.getStartGameTime());
 			}
 			
+		
+		if(!getWorld().isAlive())
+			getWorld().setAlive(true);
+		
+		new Thread("GameManager") {
+			@Override
+			public void run() {
+				while(running) {
+					for(Player p : getWorld().getMultiPlayerMap().values()){
+					for( AbstractMovableObj mov : world.getObjects() ){
+						if(Collision.checkTypeCollision(p, mov) != TypeOfCollision.ANYTHING && !mov.isCaptured()&&!p.isArrivedJumping()){
+							if(Collision.checkTypeCollision(p, mov) == TypeOfCollision.LEFT_RIGHT || 
+									Collision.checkTypeCollision(p, mov) == TypeOfCollision.RIGHT_LEFT ){
+								if(IdentifiesCollision.shallowCollision(p, mov)){
+									if(p.getDirection()==Direction.LEFT) {
+										p.setDirection(Direction.RIGHT);
+										p.setCorsia(p.getCorsia()+1);
+//										world.getEnemy().setDirection(Direction.RIGHT);
+//										world.getEnemy().setCorsia(world.getEnemy().getCorsia()+1);
+//										world.getEnemy().setY(world.getEnemy().getY()-100);
+									}
+									else if(p.getDirection()==Direction.RIGHT) {
+										p.setDirection(Direction.LEFT);
+										p.setCorsia(p.getCorsia()-1);
+//										world.getEnemy().setDirection(Direction.LEFT);
+//										world.getEnemy().setCorsia(world.getEnemy().getCorsia()-1);
+//										world.getEnemy().setY(world.getEnemy().getY()-100);
+									}
+									break;
+								}
+							}
+						
+						
+						
+							else{
+								p.setAlive(false);
+								running=false;
+							}
+						}	
+					}
+					
+					
+//					if(Collision.checkTypeCollision(world.getPlayer(), world.getEnemy()) == TypeOfCollision.DOWN_UP) {
+//						world.getPlayer().setAlive(false);
+//						running=false;
+//					}
+					
+					
+						if( p.getY() <= 0 ){
+						running=false;
+					}
+					
+					for( Bonus mov : world.getBonus() ){
+						if( Collision.checkTypeCollision(p, mov) != TypeOfCollision.ANYTHING){
+							 mov.setCurrentTime(System.currentTimeMillis()-p.getStartGameTime());
+							 mov.setCaptured(true);
+							 mov.update();
+							 p.add(mov);
+							 p.actionPowerUp(mov);
+							 world.remove(mov);
+							 break;
+						}
+						if(p.getY()+300<mov.getY()){
+							world.remove(mov);
+							break;
+						}
+					}
+					
+					
+					
+						for(AbstractMovableObj a : world.getObjects()) {
+							if(p.isExplosion()){
+							if(a.getY() < p.getY() && a.getY() > p.getY() - distanceToExplosion && a.getCorsia() == p.getCorsia()) {
+									a.setCaptured(true);
+								}
+							}
+						}
+					
+						
+					for(AbstractMovableObj o : world.getObjects()) {
+						if(((Obstacle) o).getExplosion_animation().getIndex() == ((Obstacle) o).getExplosion_animation().getSizeFrame() - 1) {
+							world.remove(o);
+//							System.out.println("gamemanager ");
+							break;
+						}
+					}
+					
+					
+				p.update();
+				
+				for(AbstractMovableObj o : world.getObjects()) {
+					o.update();
+					if(p.getY()+300<o.getY()){
+						world.remove(o);
+						break;
+					}
+				}
+			
+				
+				for(Bonus b : world.getBonus())
+					b.update();
+				
+					try {
+						if(client != null)
+							client.notifyMyState();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+//				world.getEnemy().update();
+				p.checkActiveBonus();
+//				updateOffset();
+				
+				
+				if(p.isDied()&& !running){
+					p.scoreForDistance();
+//					saveScore("Rocco");
+					System.out.println("Punti.....:" + p.getScore());
+				}
+				}
+					
+				
+				runnable.run();
+				try {
+					Thread.sleep(30);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
+				}
+			}//end while
+				
+		}
+			}.start();
+	}
+	
+	public void startNetwork(final Runnable runnable)
+	{
+			
+			
+			for(Player p : getWorld().getMultiPlayerMap().values()){
+				System.out.println("set");
+				p.setAlive(true);
+				System.out.println("Alive " + p.isAlive());
+				p.setStartGameTime(System.currentTimeMillis());
+				System.out.println("Time " + p.getStartGameTime());
+			}
+			
+			for(Entry<String, Player> p : getWorld().getMultiPlayerMap().entrySet()){
+				System.out.println("nome nella mappa "+p.getKey());
+			}
 		
 		if(!getWorld().isAlive())
 			getWorld().setAlive(true);
@@ -323,8 +479,10 @@ public class GameManager {
 					b.update();
 				
 					try {
-						if(client != null)
+						if(client != null){
+//							System.out.println("GameManaget "+client.getClientName());
 							client.notifyMyState();
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

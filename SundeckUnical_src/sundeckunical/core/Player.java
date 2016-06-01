@@ -45,6 +45,10 @@ public class Player extends AbstractMovableObj implements PowerUp{
 		bombBonusAvaible=new LinkedList<Bonus>();
 		runningSound = new SoundEffectProvider("sfx/running.wav", 0);
 		walkingSound = new SoundEffectProvider("sfx/walking.wav", +10);	
+		animation_up = new Animation(60, GamePanel.getMyImageProvider().getPlayerUp());
+		animation_left = new Animation(100, GamePanel.getMyImageProvider().getPlayerLeft());
+		animation_right = new Animation(100, GamePanel.getMyImageProvider().getPlayerRight());
+		animation_jump = new Animation(500, GamePanel.getMyImageProvider().getPlayerJump());
 		
 		System.out.println(toString());
 	}

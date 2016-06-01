@@ -36,7 +36,7 @@ public class GamePanel extends JPanel {
 	
 	
 	public GamePanel(MainFrame mainFrame) {
-		gameManager = new GameManager();
+//		gameManager = new GameManager();
 		setPreferredSize(screenSize());
 		this.mainframe=mainFrame;
 		
@@ -236,10 +236,35 @@ public class GamePanel extends JPanel {
 //		GameManager.getWorld().getEnemy().draw(g);
 	}
 	
-	public void start() {
-//		playerName = null;
+	public void startNetwork(GameManager gameManager) {
+		this.gameManager = gameManager;
+		playerName = gameManager.getWorld().getPlayerName();
 //		networkManager = null;
-		
+		System.out.println("gamepanelNetwork start");
+		System.out.println(playerName);
+		requestFocus();
+//		bgMusic.loop();
+		gameManager.startNetwork(new Runnable() {
+			@Override
+			public void run() {
+				playerCam = getViewCamera().getCamY();
+				repaint();
+//			getViewCamera().updateOffset(getPlayer());
+//				if(GameManager.getWorld().getPlayer().isDied()){
+//					bgMusic.stop();
+//					new ScreenGameOver(1000);
+//					mainframe.showMenu(MainFrame.MENU_PANEL);
+//				}
+			}
+		});	
+	}
+	
+	public void start() {
+		gameManager = new GameManager();
+		playerName = gameManager.getWorld().getPlayerName();
+//		networkManager = null;
+		System.out.println("gamepanel start");
+		System.out.println(playerName);
 		requestFocus();
 //		bgMusic.loop();
 		gameManager.start(new Runnable() {

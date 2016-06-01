@@ -22,25 +22,57 @@ public class ClientManager extends Thread {
 
 	public void startConnection() throws IOException {
 		System.out.println("Start connection CLIENT MANAGER");
-		if (input.readLine().equals("Connect me")){
+		if (input.readLine().equals("Connect me")) {
 			System.out.println("if connect me");
 			output.writeBytes("yes parse your status" + "\n");
 		}
 		System.out.println("dopo if");
 		String state = input.readLine();
+		System.out.println("state: "+state);
+		System.out.println("passo");
 		for (ClientManager c : server.getClients()) {
-			if (c != this)
+				System.out.println("for server");
+			if(c!=this)	
 				c.notifyAddNewPlayer(state);
+			else{	
+				if(server.getClients().size() > 1)
+					c.sendYourStatus();
+			}
 		}
-		this.start();
+	}
+	
+	public void sendYourStatus() throws IOException {
+		String state = null;
+		for(ClientManager c : server.getClients()){
+			if(c!=this)
+				state = c.sendStatus();
+				break;
+		}
+		for(ClientManager c : server.getClients())
+			if(c==this){
+				output.writeBytes("Add Prec Player"+"\n");
+				if(input.readLine().equals("send"))
+					output.writeBytes(state+"\n");
+			}
+				
+	}
+	
+	public String sendStatus() throws IOException {
+		output.writeBytes("please send your status"+"\n");
+		String state = input.readLine();
+		System.out.println("state prec player "+state);
+		return state;
 	}
 
 	public void notifyAddNewPlayer(String state) throws IOException {
-		// TODO fare comunicazione
 		output.writeBytes("Add new player" + "\n");
-		String line = input.readLine();
-		if (line.equals("send status"))
+		System.out.println("server: "+ "new player");
+//		String line = input.readLine();
+//		System.out.println("server:" + line);
+		if (input.readLine().equals("send status")){
+			System.out.println("server dentro if send status");
 			output.writeBytes(state + "\n");
+		}
 	}
 
 	public void sendStart() throws IOException {
@@ -48,8 +80,13 @@ public class ClientManager extends Thread {
 	}
 
 	public void notifyMyState() throws IOException {
+		System.out.println("server my state chiede stato");
 		output.writeBytes("myState" + "\n");
+		if(input.readLine().equals("send state?"))
+			output.writeBytes("yes"+"\n");
+		
 		String line = input.readLine();
+		System.out.println("STATO RICEVUTO DAL SERVER: "+line );
 		for (ClientManager c : server.getClients()) {
 			c.receivedState(line);
 		}
@@ -58,10 +95,12 @@ public class ClientManager extends Thread {
 
 	public void receivedState(String status) throws IOException {
 		output.writeBytes("state" + "\n");
+		System.out.println("Server: received state" + status);
 		this.line = status;
 	}
 
 	public void sendState() throws IOException {
+		System.out.println("Server: send state");
 		output.writeBytes(this.line + "\n");
 	}
 
@@ -71,12 +110,16 @@ public class ClientManager extends Thread {
 		boolean isStart = false;
 		try {
 			String line = input.readLine();
-			if (line.equals("Start"))
+			System.out.println("line: "+line);
+			if (line.equals("Start")){
+				System.out.println("CLIENT MANAGER Start");
 				isStart = true;
+			}
 			while (isStart) {
-				System.out.println("CLIENT MANAGER RUN is start");
+//				System.out.println("CLIENT MANAGER RUN is start");
 				line = input.readLine();
 				if (line.equals("myState")) {
+					System.out.println("Server: mystate");
 					notifyMyState();
 				}
 				if (line.equals("state")) {

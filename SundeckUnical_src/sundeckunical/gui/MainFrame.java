@@ -95,6 +95,19 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+	
+	public void startGameNetwork() {
+	gamePanel = new GamePanel(this);
+	SwingUtilities.invokeLater(()->{
+		setContentPane(gamePanel);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		pack();
+		setLocationRelativeTo(null);
+		gamePanel.requestFocus();
+		gamePanel.updateUI();
+	});
+}
+	
 	public void showSettingPanel() {
 		SwingUtilities.invokeLater(()->{
 			setContentPane(settingsPanel);

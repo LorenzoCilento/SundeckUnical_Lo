@@ -21,6 +21,7 @@ public class World {
 	private int numberLane;			//numero di corsie a disposizione del player
 	protected static int [] corsie;
 	
+	
 	private static final String DEFAULT_PLAYER_NAME = "PLAYER_1";
 	private String playerName = null;
 	Map<String, Player> multiPlayerMap;
@@ -253,19 +254,42 @@ public class World {
 	}
 	
 	public void addPlayer(String string){
+		
 		String[] split = string.split(":");
+		System.out.println("add player");
 		int x = Integer.parseInt(split[1]);
 		int y = Integer.parseInt(split[2]);
 		Direction direction = Direction.valueOf(split[3]);
 		int corsia = Integer.parseInt(split[4]);
-		multiPlayerMap.put(split[0], new Player(x, y, direction, corsia));
+		System.out.println(split[0].toString()+" "+x+" "+y+" "+direction.name()+" "+ corsia);
+		Player p =  new Player(getCorsie()[corsia], y, direction, corsia);
+		p.setWorld(this);
+		multiPlayerMap.put(split[0], p);
 	}
 	
 	public String statusPlayerToString(){
 		StringBuilder sb = new StringBuilder();
 		Player p = multiPlayerMap.get(playerName);
-			sb.append(playerName+":"+p.getX()+":"+p.getY()+":"+p.getDirection()+":"+p.getCorsia()+";");
+			sb.append(playerName+":"+p.getX()+":"+p.getY()+":"+p.getDirection()+":"+p.getCorsia());
+		System.out.println("status player to string "+sb.toString());
 		return sb.toString();
+	}
+	
+	public void refreshPlayer(String status) {
+		String[] split = status.split(":");
+		System.out.println("refresh player");
+		String name = split[0].toString();
+		int x = Integer.parseInt(split[1]);
+		int y = Integer.parseInt(split[2]);
+		Direction direction = Direction.valueOf(split[3]);
+		int corsia = Integer.parseInt(split[4]);
+		System.out.println(split[0].toString()+" "+x+" "+y+" "+direction.name()+" "+ corsia);
+		if(name != playerName){
+			getMultiPlayerMap().get(name).setX(x);
+			getMultiPlayerMap().get(name).setY(y);
+			getMultiPlayerMap().get(name).setDirection(direction);
+			getMultiPlayerMap().get(name).setCorsia(corsia);
+		}
 	}
 	
 	public void parseStatusPlayerFormString(String string){

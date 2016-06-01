@@ -23,34 +23,22 @@ public class Server extends Thread {
 		int contNumberPlayer = 0;
 		while(contNumberPlayer != numberPlayer){
 			try {
-				System.out.println("Start server");
-				System.out.println("server player "+contNumberPlayer );
 				Socket socket = server.accept();
-				System.out.println("dopo accept");
 				ClientManager clientManager = new ClientManager(this,socket);
 				clients.add(clientManager);
 				contNumberPlayer++;
-				System.out.println("dopo add");
-//				clientManager.startConnection();
-				System.out.println("dopo startConnection");
-		 		System.out.println("server player "+contNumberPlayer );
+				clientManager.startConnection();
+
 				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 		}
-		System.out.println("uscito da run");
 		System.out.println("numero clients aggiunti "+clients.size());
-		for(ClientManager c : clients)
-			try {
-				c.startConnection();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		for (ClientManager c : clients)
 			try {
+				c.start();
 				c.sendStart();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

@@ -37,5 +37,6 @@
 	<classpathentry kind="lib" path="C:/Users/Rocco/Dropbox/ProgettI Unical/lib/stack-alloc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Rocco/Dropbox/ProgettI Unical/lib/vecmath.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Rocco/Dropbox/ProgettI Unical/lib/xmlpull-xpp3.jar"/>
+	<classpathentry kind="lib" path="mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

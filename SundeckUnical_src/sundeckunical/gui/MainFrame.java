@@ -101,9 +101,9 @@ public class MainFrame extends JFrame {
 	gamePanel = new GamePanel(this);
 	SwingUtilities.invokeLater(()->{
 		setContentPane(gamePanel);
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		pack();
-		setLocationRelativeTo(null);
+//		setLocationRelativeTo(null);
 		gamePanel.requestFocus();
 		gamePanel.updateUI();
 	});
@@ -138,7 +138,7 @@ public class MainFrame extends JFrame {
 		dialog.setLocationRelativeTo(this);
 		dialog.setVisible(true);
 
-		SwingUtilities.invokeLater(() -> setContentPane(new JLabel(
-				"Please wait...")));
+//		SwingUtilities.invokeLater(() -> setContentPane(new JLabel(
+//				"Please wait...")));
 	}
 }

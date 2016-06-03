@@ -151,6 +151,8 @@ public abstract class AbstractMovableObj implements MovableObj {
 	public void setDirection(Direction d) {
 		synchronized (lock) {
 			this.direction=d;	
+			if(d == Direction.JUMP)
+				setFinalY(getY()-30*getSpeed());
 		}	
 	}
 	
@@ -240,14 +242,16 @@ public abstract class AbstractMovableObj implements MovableObj {
 					break;
 				case JUMP: 
 					
-					
+					System.out.println("JUMP");
 					if(isArrivedJumping()) {
-						
+						setJumping(true);
+						System.out.println("jumping " + isJumping);
 						y -= getSpeed()*3;
 						
 					}
 					else {
-						
+						setJumping(false);
+						System.out.println("jumping " + isJumping);
 						setDirection(Direction.UP);
 					}
 					break;
@@ -343,6 +347,7 @@ public abstract class AbstractMovableObj implements MovableObj {
 			}
 			setMoving(true);
 			setFinalY(getY()+10);
+			setJumping(false);
 			return false;
 		}
 	}
@@ -355,6 +360,7 @@ public abstract class AbstractMovableObj implements MovableObj {
 			}
 			setMoving(true);
 			setFinalY(getY()+10);
+			setJumping(false);
 			return false;
 		}
 	}

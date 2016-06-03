@@ -3,6 +3,7 @@ package sundeckunical.gui;
 import sundeckunical.core.*;
 import sundeckunical.sfx.SoundEffectProvider;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,6 +20,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.*;
 
@@ -36,8 +39,8 @@ public class GamePanel extends JPanel {
 	
 	
 	public GamePanel(MainFrame mainFrame) {
-		setPreferredSize(screenSize());
 		this.mainframe=mainFrame;
+		setPreferredSize(new Dimension(500, 800));
 		
 		bgMusic = new SoundEffectProvider("/music/music2.wav",-30);
 		swipePlayer = new SoundEffectProvider("/sfx/swipe.wav",-10);
@@ -89,9 +92,10 @@ public class GamePanel extends JPanel {
 				break;
 			case KeyEvent.VK_SPACE:
 				if(!getPlayer().isJumping() && getPlayer().getDirection() == Direction.UP){
-					getPlayer().setJumping(true);
-					getPlayer().setFinalY(getPlayer().getY()-(30*getPlayer().getSpeed()));
+//					getPlayer().setJumping(true);
+//					getPlayer().setFinalY(getPlayer().getY()-(30*getPlayer().getSpeed()));
 					setDirection(Direction.JUMP);
+					notifyServer();
 				}
 				break;	
 			default:
@@ -107,7 +111,7 @@ public class GamePanel extends JPanel {
 				swipePlayer.stop();
 			}
 			if( e.getKeyCode() == KeyEvent.VK_SPACE ){
-				getPlayer().setJumping(false);
+//				getPlayer().setJumping(false);
 			}
 			
 		}
@@ -216,6 +220,8 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		int nx=tick();
 		int nx2=nx-(int)screenSize().getHeight();
+		final Collection<Player> player = gameManager.getWorld().getPlayerValue();
+		final Map<String,Player> player2 = gameManager.getWorld().getMultiPlayerMap();
 		
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -225,19 +231,32 @@ public class GamePanel extends JPanel {
 		g.drawImage(myImageProvider.getAlberi(), 0, nx2, (int)screenSize().getWidth(),(int)screenSize().getHeight(),null);
 	
 		
-//		drawScore(g);
-//		drawMeter(g);
 		
-		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
-		
+//		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
+		drawScore(g);
+		drawMeter(g);
+		g.translate(200, - getViewCamera().getCamY());
 		/* disegno i componenti del world */
 
-		final Collection<Player> player = gameManager.getWorld().getPlayerValue();
 		GameManager.getWorld().draw(g);	
-		for(Player p : player)
-			p.draw(g);
+//		for(Player p : player){
+//			p.draw(g);
+//		}
+		Graphics2D g2d = (Graphics2D) g;
+		System.out.println("Pannello " + playerName);
+		for(Entry<String, Player> p : player2.entrySet()){
+			if(p.getKey().equals(playerName))
+					p.getValue().draw(g);
+		}
+		
+		for(Entry<String, Player> p : player2.entrySet()){
+			if(!p.getKey().equals(playerName)){
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.5f));
+				p.getValue().draw(g);
+			}
+			}
 //		GameManager.getWorld().getEnemy().draw(g);
-	}
+		}
 	
 	public void startNetwork(GameManager gameManager) {
 		this.gameManager = gameManager;

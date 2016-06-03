@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import sundeckunical.gui.NetworkManager;
 import sundeckunical.multiPlayer.Client;
 import sundeckunical.sfx.SoundEffectProvider;
 
@@ -30,8 +29,6 @@ public class GameManager {
 	private int offSetMaxY;
 	private int camY;
 	private static final int distanceToExplosion = 50;
-	
-	private NetworkManager manager = null;
 
 	public GameManager() {
 		System.out.println("gameManager");
@@ -203,14 +200,6 @@ public class GameManager {
 	
 	public void addPlayer(String string){
 		getWorld().addPlayer(string);
-	}
-	
-	public NetworkManager getNetworkManager() {
-		return manager;
-	}
-
-	public void setNetworkManager(NetworkManager manager) {
-		this.manager = manager;
 	}
 
 	public void start(final Runnable runnable)

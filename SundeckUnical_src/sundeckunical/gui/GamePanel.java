@@ -32,17 +32,15 @@ public class GamePanel extends JPanel {
 	int prova=0;
 	
 	private String playerName;
-	private NetworkManager networkManager;
 	private int playerCam = 0;
 	
 	
 	public GamePanel(MainFrame mainFrame) {
-//		gameManager = new GameManager();
 		setPreferredSize(screenSize());
 		this.mainframe=mainFrame;
 		
-		bgMusic = new SoundEffectProvider("/music/music2.wav",-20);
-		swipePlayer = new SoundEffectProvider("/sfx/swipe.wav",0);
+		bgMusic = new SoundEffectProvider("/music/music2.wav",-30);
+		swipePlayer = new SoundEffectProvider("/sfx/swipe.wav",-10);
 		this.addKeyListener( new KeyControls() );
 		
 	}
@@ -66,12 +64,7 @@ public class GamePanel extends JPanel {
 						setDirection(Direction.LEFT);
 //						GameManager.getWorld().getEnemy().setCorsia(GameManager.getWorld().getEnemy().getCorsia()-1);
 //						GameManager.getWorld().getEnemy().setDirection(Direction.LEFT);
-						try {
-							gameManager.getClient().notifyMyState();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						notifyServer();
 						swipePlayer.play();
 					}
 				}
@@ -86,12 +79,7 @@ public class GamePanel extends JPanel {
 							setDirection(Direction.RIGHT);
 //							GameManager.getWorld().getEnemy().setCorsia(GameManager.getWorld().getEnemy().getCorsia()+1);
 //							GameManager.getWorld().getEnemy().setDirection(Direction.RIGHT);
-							try {
-								gameManager.getClient().notifyMyState();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+							notifyServer();
 							swipePlayer.play();
 						}	
 				}
@@ -148,10 +136,14 @@ public class GamePanel extends JPanel {
 			}
 		}
 
-		private void signalServer(int corsia) {
-			
-			if (networkManager != null) {
-				networkManager.dispatch(playerName+":"+ getPlayer().getDirection().name()+":"+corsia);
+		private void notifyServer() {
+			if(gameManager.getClient() != null){
+				try {
+					gameManager.getClient().notifyMyState();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	}	
@@ -237,7 +229,7 @@ public class GamePanel extends JPanel {
 //		drawMeter(g);
 		
 		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
-		getViewCamera().updateOffset(getPlayer());
+		
 		/* disegno i componenti del world */
 
 		final Collection<Player> player = gameManager.getWorld().getPlayerValue();
@@ -250,17 +242,17 @@ public class GamePanel extends JPanel {
 	public void startNetwork(GameManager gameManager) {
 		this.gameManager = gameManager;
 		playerName = gameManager.getWorld().getPlayerName();
-//		networkManager = null;
+
 		System.out.println("gamepanelNetwork start");
 		System.out.println(playerName);
 		requestFocus();
-//		bgMusic.loop();
+		bgMusic.loop();
 		gameManager.startNetwork(new Runnable() {
 			@Override
 			public void run() {
 				playerCam = getViewCamera().getCamY();
 				repaint();
-//			getViewCamera().updateOffset(getPlayer());
+			getViewCamera().updateOffset(getPlayer());
 //				if(GameManager.getWorld().getPlayer().isDied()){
 //					bgMusic.stop();
 //					new ScreenGameOver(1000);
@@ -272,23 +264,21 @@ public class GamePanel extends JPanel {
 	
 	public void start() {
 		gameManager = new GameManager();
-		playerName = gameManager.getWorld().getPlayerName();
-//		networkManager = null;
-		System.out.println("gamepanel start");
-		System.out.println(playerName);
+		playerName = null;
+		
 		requestFocus();
-//		bgMusic.loop();
+		bgMusic.loop();
 		gameManager.start(new Runnable() {
 			@Override
 			public void run() {
 				playerCam = getViewCamera().getCamY();
 				repaint();
-//			getViewCamera().updateOffset(getPlayer());
-//				if(GameManager.getWorld().getPlayer().isDied()){
-//					bgMusic.stop();
-//					new ScreenGameOver(1000);
-//					mainframe.showMenu(MainFrame.MENU_PANEL);
-//				}
+			getViewCamera().updateOffset(getPlayer());
+				if(GameManager.getWorld().getPlayer().isDied()){
+					bgMusic.stop();
+					new ScreenGameOver(1000);
+					mainframe.showMenu(MainFrame.MENU_PANEL);
+				}
 			}
 		});	
 	}
@@ -303,16 +293,5 @@ public class GamePanel extends JPanel {
 	
 	public void immagineSfondo(Graphics g) {
 		int dy = tick();
-	}
-	
-	GameManager startNetwork(NetworkManager networkManager) {
-		this.networkManager = networkManager;
-		playerName = networkManager.getPlayerName();
-		System.out.println("GamePanel.startNetwork() " + playerName);
-//		gameManager.startNetworkGame(networkManager.getAllPlayerNames());
-		playerCam = getViewCamera().getCamY();
-		this.start();
-		requestFocus();
-		return gameManager;
 	}
 }

@@ -4,12 +4,10 @@ import java.awt.Graphics;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import sundeckunical.gui.GamePanel;
-import sundeckunical.gui.NetworkManager;
 import sundeckunical.gui.ViewCamera;
 
 public class World {

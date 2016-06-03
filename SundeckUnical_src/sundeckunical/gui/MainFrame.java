@@ -12,11 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import sundeckunical.core.GameManager;
-
-
 public class MainFrame extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private MenuPanel menuPanel;
 	private GamePanel gamePanel;
 	private SettingsPanel settingsPanel;
@@ -140,15 +141,4 @@ public class MainFrame extends JFrame {
 		SwingUtilities.invokeLater(() -> setContentPane(new JLabel(
 				"Please wait...")));
 	}
-
-	GameManager startNetworkGame(NetworkManager networkManager) {
-		gamePanel = new GamePanel(this);
-		SwingUtilities.invokeLater(() -> {
-			setContentPane(gamePanel);
-			gamePanel.requestFocus();
-			gamePanel.updateUI();
-		});
-		return gamePanel.startNetwork(networkManager);
-	}
-
 }

@@ -1,6 +1,5 @@
 package sundeckunical.core;
 
-import sundeckunical.gui.NetworkManager;
 import sundeckunical.sfx.SoundEffectProvider;
 
 /*
@@ -38,8 +37,6 @@ public abstract class AbstractMovableObj implements MovableObj {
 	private int movement;
 	protected World world;
 	
-	private NetworkManager networkManager = null;
-	
 	private SoundEffectProvider sound;
 
 	public AbstractMovableObj(int x, int y, Direction direction, int corsia) {
@@ -68,14 +65,6 @@ public abstract class AbstractMovableObj implements MovableObj {
 		}
 	}
 	
-	public NetworkManager getNetworkManager() {
-		return networkManager;
-	}
-
-	public void setNetworkManager(NetworkManager networkManager) {
-		this.networkManager = networkManager;
-	}
-
 	public int getSpeed(){
 		synchronized(lock){
 			return speed;

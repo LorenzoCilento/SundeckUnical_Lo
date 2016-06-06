@@ -18,7 +18,7 @@ public class World {
 	
 	private int numberLane;			//numero di corsie a disposizione del player
 	protected static int [] corsie;
-	
+	private int contMov = 0;
 	
 	private static final String DEFAULT_PLAYER_NAME = "PLAYER_1";
 	private String playerName = null;
@@ -275,19 +275,22 @@ public class World {
 	
 	public void refreshPlayer(String status) {
 		String[] split = status.split(":");
-		System.out.println("refresh player");
-		String name = split[0].toString();
-		int x = Integer.parseInt(split[1]);
-		int y = Integer.parseInt(split[2]);
-		Direction direction = Direction.valueOf(split[3]);
-		int corsia = Integer.parseInt(split[4]);
-		System.out.println(split[0].toString()+" "+x+" "+y+" "+direction.name()+" "+ corsia);
-		if(!name.equals(playerName)){
-			System.out.println("aggiorno "+name+" nel mondo di "+playerName);
-			getMultiPlayerMap().get(name).setX(x);
-			getMultiPlayerMap().get(name).setY(y);
-			getMultiPlayerMap().get(name).setDirection(direction);
-			getMultiPlayerMap().get(name).setCorsia(corsia);
+		System.out.println("Lenght" + split.length);
+		if(split.length == 5){
+			System.out.println("refresh player");
+			String name = split[0].toString();
+			int x = Integer.parseInt(split[1]);
+			int y = Integer.parseInt(split[2]);
+			Direction direction = Direction.valueOf(split[3]);
+			int corsia = Integer.parseInt(split[4]);
+			System.out.println("refresh" + split[0].toString()+" "+x+" "+y+" "+direction.name()+" "+ corsia);
+			if(!name.equals(playerName)){
+				System.out.println("aggiorno "+name+" nel mondo di "+playerName);
+				getMultiPlayerMap().get(name).setX(x);
+				getMultiPlayerMap().get(name).setY(y);
+				getMultiPlayerMap().get(name).setDirection(direction);
+				getMultiPlayerMap().get(name).setCorsia(corsia);
+			}
 		}
 	}
 	

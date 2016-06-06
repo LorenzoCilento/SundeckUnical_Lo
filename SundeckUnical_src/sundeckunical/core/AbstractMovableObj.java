@@ -235,23 +235,20 @@ public abstract class AbstractMovableObj implements MovableObj {
 		synchronized (lock) {
 			switch(direction){
 				case UP:
+					setJumping(false);
 					if( 0 <= (y-getSpeed()) )
 						y-=getSpeed();
 					else
 						y=-1;
 					break;
 				case JUMP: 
-					
-					System.out.println("JUMP");
 					if(isArrivedJumping()) {
 						setJumping(true);
-						System.out.println("jumping " + isJumping);
 						y -= getSpeed()*3;
 						
 					}
 					else {
 						setJumping(false);
-						System.out.println("jumping " + isJumping);
 						setDirection(Direction.UP);
 					}
 					break;

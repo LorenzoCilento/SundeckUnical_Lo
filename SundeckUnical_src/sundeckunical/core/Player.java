@@ -162,7 +162,7 @@ public class Player extends AbstractMovableObj implements PowerUp{
 			g2d.drawImage(animation_right.getCurrentFrame(), getX(), drawY, getWIDTH()+20, getHEIGHT()+20, null);
 		}
 		if(isJumping()){
-			System.out.println("STAMPA 6");
+//			System.out.println("STAMPA 6");
 			int jump=25;
 				g2d.translate(-jump/2, -jump/2);
 				g2d.drawImage(animation_jump.getCurrentFrame(), getX(), getY(), getWIDTH()+jump, getHEIGHT()+jump, null);

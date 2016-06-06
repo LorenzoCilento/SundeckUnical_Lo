@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import sundeckunical.core.GameManager;
 import sundeckunical.gui.MainFrame;
@@ -46,48 +47,48 @@ public class Client extends Thread {
 	}
 
 	public void notifyAddNewPlayer() throws IOException {
-		System.out.println("client: "+ "new player");
+		System.out.println("client: " + "new player");
 		output.writeBytes("send status" + "\n");
 		System.out.println("dopo send status");
 		String line = input.readLine();
 		System.out.println(line);
 		gameManager.addPlayer(line);
 	}
-	
-	public void notifyMyState() throws IOException{
-		output.writeBytes("myState"+"\n");
+
+	public void notifyMyState() throws IOException {
+		output.writeBytes("myState-" + gameManager.statusPlayerToString() + "\n");
 	}
-	
-	public void notifyMyRealState() throws IOException{
+
+	public void notifyMyRealState() throws IOException {
 		String status = gameManager.statusPlayerToString();
-		output.writeBytes("send state?"+"\n");
-		if(input.readLine().equals("yes")){
-			System.out.println("Client: " + name+" Notify my real status " + status);
-			output.writeBytes(status+"\n");
+		output.writeBytes("send state?" + "\n");
+		if (input.readLine().equals("yes")) {
+			System.out.println("Client: " + name + " Notify my real status " + status);
+			output.writeBytes(status + "\n");
 		}
 	}
-	
-	public void receivedState() throws IOException{
-		output.writeBytes("state"+"\n");
+
+	public void receivedState() throws IOException {
+//		output.writeBytes("state" + "\n");
 		String status = input.readLine();
-		System.out.println("Client "+name+" received state: " +status);
+		System.out.println("Client " + name + " received state: " + status);
 		gameManager.refreshPlayer(status);
 	}
-	
+
 	public void sendMyStatus() throws IOException {
-		
+
 	}
-	
+
 	public void addPrecPlayer() throws IOException {
-		output.writeBytes("send"+"\n");
+		output.writeBytes("send" + "\n");
 		String state = input.readLine();
-		System.out.println("sto aggiungengo a gamemanager di "+gameManager.getWorld().getPlayerName()+" "+ state);
+		System.out.println("sto aggiungengo a gamemanager di " + gameManager.getWorld().getPlayerName() + " " + state);
 		gameManager.addPlayer(state);
 	}
-	
-	public void sendStatus() throws IOException{
+
+	public void sendStatus() throws IOException {
 		String state = gameManager.statusPlayerToString();
-		output.writeBytes(state+"\n");
+		output.writeBytes(state + "\n");
 	}
 
 	@Override
@@ -100,15 +101,15 @@ public class Client extends Thread {
 				System.out.println("CLIENT RUN isStop");
 				String line = input.readLine();
 				System.out.println(line);
-				if (line.equals("Add new player")){
+				if (line.equals("Add new player")) {
 					System.out.println("run add new player");
 					notifyAddNewPlayer();
 				}
-				if(line.equals("please send your status")){
+				if (line.equals("please send your status")) {
 					System.out.println("please send");
 					sendStatus();
 				}
-				if(line.equals("Add Prec Player")){
+				if (line.equals("Add Prec Player")) {
 					addPrecPlayer();
 				}
 				if (line.equals("Start")) {
@@ -125,16 +126,16 @@ public class Client extends Thread {
 			while (isStart) {
 				System.out.println("CLIENT RUN start");
 				String line = input.readLine();
-				if(line.equals("myState")){
+				if (line.equals("myState")) {
 					System.out.println("Client my state");
 					notifyMyRealState();
 				}
-				if(line.equals("state")){
+				if (line.equals("state")) {
+					System.out.println("entro received state client");
 					receivedState();
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

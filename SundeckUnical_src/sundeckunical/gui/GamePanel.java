@@ -9,17 +9,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MediaTracker;
 import java.awt.RenderingHints;
-import java.awt.TexturePaint;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -27,12 +21,17 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private GameManager gameManager;
 	private static final MyImageProvider myImageProvider= new MyImageProvider();
 	private final MainFrame mainframe;
 	private SoundEffectProvider bgMusic;
 	private SoundEffectProvider swipePlayer;
 	int prova=0;
+	private static final String DEFAULT_PLAYER_NAME = "PLAYER_1";
 	
 	private String playerName;
 	private int playerCam = 0;
@@ -40,11 +39,11 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel(MainFrame mainFrame) {
 		this.mainframe=mainFrame;
-		setPreferredSize(new Dimension(500, 800));
+		setPreferredSize(new Dimension(600, 800));
+		this.addKeyListener( new KeyControls() );
 		
 		bgMusic = new SoundEffectProvider("/music/music2.wav",-30);
 		swipePlayer = new SoundEffectProvider("/sfx/swipe.wav",-10);
-		this.addKeyListener( new KeyControls() );
 		
 	}
 
@@ -92,8 +91,6 @@ public class GamePanel extends JPanel {
 				break;
 			case KeyEvent.VK_SPACE:
 				if(!getPlayer().isJumping() && getPlayer().getDirection() == Direction.UP){
-//					getPlayer().setJumping(true);
-//					getPlayer().setFinalY(getPlayer().getY()-(30*getPlayer().getSpeed()));
 					setDirection(Direction.JUMP);
 					notifyServer();
 				}
@@ -109,9 +106,6 @@ public class GamePanel extends JPanel {
 
 			if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_LEFT){
 				swipePlayer.stop();
-			}
-			if( e.getKeyCode() == KeyEvent.VK_SPACE ){
-//				getPlayer().setJumping(false);
 			}
 			
 		}
@@ -145,7 +139,6 @@ public class GamePanel extends JPanel {
 				try {
 					gameManager.getClient().notifyMyState();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -220,8 +213,7 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		int nx=tick();
 		int nx2=nx-(int)screenSize().getHeight();
-		final Collection<Player> player = gameManager.getWorld().getPlayerValue();
-		final Map<String,Player> player2 = gameManager.getWorld().getMultiPlayerMap();
+		final Map<String,Player> player = gameManager.getWorld().getMultiPlayerMap();
 		
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -232,29 +224,35 @@ public class GamePanel extends JPanel {
 	
 		
 		
-//		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
 		drawScore(g);
 		drawMeter(g);
-		g.translate(200, - getViewCamera().getCamY());
+//		g.translate(+(int)((screenSize().getWidth() - GameManager.getWorld().getWIDTH())/2), - getViewCamera().getCamY());
+		g.translate(150, - getViewCamera().getCamY());
 		/* disegno i componenti del world */
 
 		GameManager.getWorld().draw(g);	
-//		for(Player p : player){
-//			p.draw(g);
-//		}
+
 		Graphics2D g2d = (Graphics2D) g;
-		System.out.println("Pannello " + playerName);
-		for(Entry<String, Player> p : player2.entrySet()){
-			if(p.getKey().equals(playerName))
-					p.getValue().draw(g);
-		}
 		
-		for(Entry<String, Player> p : player2.entrySet()){
-			if(!p.getKey().equals(playerName)){
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.5f));
-				p.getValue().draw(g);
+		if(gameManager.getClient() != null){
+			for(Entry<String, Player> p : player.entrySet()){
+				if(p.getKey().equals(playerName))
+						p.getValue().draw(g);
 			}
+			
+			for(Entry<String, Player> p : player.entrySet()){
+				if(!p.getKey().equals(playerName)){
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.5f));
+					p.getValue().draw(g);
+					}
+				}
+		}
+		else{
+			for(Entry<String, Player> p : player.entrySet()){
+						p.getValue().draw(g);
 			}
+		}
+			
 //		GameManager.getWorld().getEnemy().draw(g);
 		}
 	
@@ -269,7 +267,7 @@ public class GamePanel extends JPanel {
 		gameManager.startNetwork(new Runnable() {
 			@Override
 			public void run() {
-				playerCam = getViewCamera().getCamY();
+//				playerCam = getViewCamera().getCamY();
 				repaint();
 			getViewCamera().updateOffset(getPlayer());
 //				if(GameManager.getWorld().getPlayer().isDied()){

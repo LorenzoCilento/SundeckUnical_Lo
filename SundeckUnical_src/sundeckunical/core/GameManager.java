@@ -20,6 +20,8 @@ public class GameManager {
 	private WorldManager worldManager;
 	private boolean running;
 	private Client client = null;
+	private long startTime;
+	private long lastTime;
 
 	private final List<Score> scores = new ArrayList<Score>();
 	
@@ -344,7 +346,7 @@ public class GameManager {
 				
 				runnable.run();
 				try {
-					Thread.sleep(30);
+					Thread.sleep(20);
 				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -356,7 +358,7 @@ public class GameManager {
 	
 	public void startNetwork(final Runnable runnable)
 	{
-			Direction direction;
+			startTime = System.currentTimeMillis();
 			
 			for(Player p : getWorld().getMultiPlayerMap().values()){
 				System.out.println("set");
@@ -367,12 +369,12 @@ public class GameManager {
 			}
 			
 			for(Entry<String, Player> p : getWorld().getMultiPlayerMap().entrySet()){
-				System.out.println("nome nella mappa "+p.getKey());
+				System.out.println("nome nella mappa di "+ client.getClientName()+" " +p.getKey());
 			}
 		
 		if(!getWorld().isAlive())
 			getWorld().setAlive(true);
-		
+			
 		new Thread("GameManager") {
 			@Override
 			public void run() {
@@ -457,7 +459,7 @@ public class GameManager {
 					}
 					
 					
-				p.update();
+					p.update();
 				
 				for(AbstractMovableObj o : world.getObjects()) {
 					o.update();
@@ -471,15 +473,20 @@ public class GameManager {
 				for(Bonus b : world.getBonus())
 					b.update();
 				
+				lastTime = System.currentTimeMillis();
+//				System.out.println("TIME " + (lastTime - startTime));
+//				if(lastTime - startTime > 200) {
 //					try {
 //						if(client != null){
 ////							System.out.println("GameManaget "+client.getClientName());
 //							client.notifyMyState();
+//							startTime = System.currentTimeMillis();
 //						}
 //					} catch (IOException e) {
 //						// TODO Auto-generated catch block
 //						e.printStackTrace();
 //					}
+//				}
 //				world.getEnemy().update();
 				p.checkActiveBonus();
 //				updateOffset();
@@ -495,7 +502,7 @@ public class GameManager {
 				
 				runnable.run();
 				try {
-					Thread.sleep(30);
+					Thread.sleep(20);
 				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
